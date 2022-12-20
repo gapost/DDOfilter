@@ -1,0 +1,172 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[left=2.00cm, right=2.00cm, top=2.00cm, bottom=2.00cm]{geometry}
+\author{GA}
+\title{Driven Damped Oscillator (DDO) filter}
+\begin{document}
+
+\maketitle
+
+A damped oscillator driven by a signal can be used as a filter and differentiator.
+ 
+The relevant equation is
+\begin{equation}\label{key}
+m\ddot{x} = -k\,(x-u) - 2\gamma\, \dot{x}
+\end{equation}	
+where $u$ is the driving signal.
+
+Inserting the frequency $\omega_0 = \sqrt{k/m}$ and scaling time to $\omega_0$, i.e. $t \rightarrow \omega_0 t$, we get
+\begin{equation}\label{key}
+\ddot{x} + 2 \zeta \dot{x}  + x = u 
+\end{equation}	
+where $\zeta = \gamma / m\omega_0$ is a dimensionless damping parameter (large $\zeta$ = high damping). The ``quality factor'' $Q$, sometimes used to characterize resonances, is the inverse of $\zeta$.
+
+\section{ODE system}
+
+The equation can be written as a 1st order ODE system 
+\begin{equation}
+\dot{\mathbf{x}} = \mathbf{A \cdot x} + \mathbf{b}\,u
+\end{equation}
+
+\begin{equation}
+\mathbf{x} =
+\left[\begin{matrix}
+x \\
+\dot{x}
+\end{matrix}\right],
+\quad
+\mathbf{A} =
+\left[\begin{matrix}
+0 & 1 \\
+-1 & -2\zeta
+\end{matrix}\right],
+\quad
+\mathbf{b} =
+\left[\begin{matrix}
+0 \\
+1
+\end{matrix}\right]
+\end{equation}
+
+The solution is
+\begin{equation}
+\mathbf{x}(t) = e^{\mathbf{A}t}\mathbf{\cdot x}_0 + 
+e^{\mathbf{A}t} \int_0^t dt' 
+\left[e^{-\mathbf{A}t}\mathbf{\cdot b}\right] u
+\end{equation}
+
+The matrix exp can be obtained by finding the eigensystem of $\mathbf{A}$.
+
+The eigenvalues of $\mathbf{A}$ are
+\begin{equation}
+\lambda_{1,2} = -\zeta \pm \sqrt{\zeta^2-1}
+\end{equation}
+
+For $1 > \zeta > 0$ we have complex (oscillatory) eigenvalues and the system is ``under-damped'' while for $ \zeta > 1$ the eigenvalues are real and the system is ``over-damped''.
+
+The solution for constant $u$ can be written 
+\begin{equation}
+\mathbf{x}(t) = e^{\mathbf{A}t}\mathbf{\cdot x}_0 + 
+u \, \mathbf{h}(t), 
+\quad
+\mathbf{h}(t) = \int_0^t dt'\; e^{\mathbf{A}t'}\mathbf{\cdot b}
+\end{equation}
+
+For $\zeta>1$ we have
+
+\begin{equation}
+q = \sqrt{\zeta^2-1}
+\end{equation}
+
+\begin{equation}
+e^{\mathbf{A}t} = e^{-\zeta t} \cosh qt \cdot \mathbf{1} +
+e^{-\zeta t}\frac{\sinh qt}{q} \cdot
+\left[\begin{matrix}
+\zeta & 1 \\
+-1 & -\zeta
+\end{matrix}\right]
+\end{equation}
+
+\begin{equation}
+\mathbf{h(t)} = 
+\left( 1 - e^{-\zeta t} \cosh qt \right)\cdot
+\left[\begin{matrix}
+1 \\
+0
+\end{matrix}\right] 
++ e^{-\zeta t}\frac{\sinh qt}{q}\cdot
+\left[\begin{matrix}
+-\zeta \\
+1 
+\end{matrix}\right]
+\end{equation}
+
+For $0 < \zeta <1$ we set $q=\sqrt{1-\zeta^2}$ and change $\cosh, \sinh$ to $\cos, \sin$.
+
+For the special case $\zeta=1$ the equations simplify to
+\begin{equation}
+e^{\mathbf{A}t} = e^{-t}\cdot
+\left[\begin{matrix}
+1+t & t \\
+-t & 1-t
+\end{matrix}\right]
+\end{equation}
+
+\begin{equation}
+\mathbf{h(t)} = 
+\left[\begin{matrix}
+ 1 - e^{-t} - t\, e^{-t} \\
+ t\,e^{-t}
+\end{matrix}\right] 
+\end{equation}
+
+\section{Transfer function}
+
+\begin{equation}\label{key}
+G = \frac{x}{u}
+\end{equation}
+
+Applying standard Laplace transforms:
+\begin{equation}\label{key}
+G(s) = \frac{1}{1 + 2\zeta \, s + s^2}, \quad G(i\omega) = \frac{1}{1 + 2i \zeta \, \omega - \omega^2}
+\end{equation}
+
+\begin{equation}\label{key}
+|G(i\omega)| = \frac{1}{\sqrt{(\omega^2-1)^2 + 4\zeta^2\omega^2}}
+\end{equation}
+
+\begin{equation}\label{key}
+\arg G(i\omega) = \frac{2\zeta\omega}{\omega^2-1}
+\end{equation}
+
+It can be shown from the structure of $|G(i\omega)|$ that the value $\zeta = 1/\sqrt{2}$ is the lowest damping factor that does not make any signal amplification close to the resonance. The tranfer function is then $|G(i\omega)|=(\omega^4+1)^{-1/2}$, which is always lower than 1.
+
+\section{Application to signal filtering}
+
+Assuming we have a signal $u(t)$ digitized at a regular interval $\Delta t$, $u_k = u(k\cdot \Delta t)$ then we update the system by
+\begin{equation}\label{key}
+\mathbf{x}_{k+1} =   e^{\mathbf{A} \omega_0 \Delta t}\mathbf{\cdot x}_k + 
+u_k \, \mathbf{h}(\omega_0 \Delta t)
+\end{equation}
+
+Then $[\mathbf{x}_{k+1}]_1$ corresponds to the filtered signal and  $\omega_0\, [\mathbf{x}_{k+1}]_2$ to the 1st order time derivative $du/dt$.
+
+Li \& Ma (2014, DOI 10.1007/s00034-013-9634-z) "A New Approach for Filtering and Derivative Estimation of Noisy Signals"
+use the above equation to filter a signal and extract the 1st order derivative. They do not state explicitly that it is the oscillator equation but arrive at the same results from a different reasoning. 
+
+They use $\zeta = 1/\sqrt{2}$ and define a parameter $\epsilon = \sqrt{2}/\omega_0$. They write the equation
+\begin{equation}\label{key}
+\ddot{x} = -\frac{2}{\epsilon^2} (x-u) - \frac{2}{\epsilon}\dot{x}
+\end{equation}
+
+
+
+
+
+	
+\end{document}
