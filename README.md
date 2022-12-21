@@ -19,4 +19,4 @@ cmake ..
 make (or nmake)
 ```
 
-This project is part of QDaq (https://gitlab.com/qdaq)
+This is part of QDaq (https://gitlab.com/qdaq/qdaq) - Qt-based Data Acquisition

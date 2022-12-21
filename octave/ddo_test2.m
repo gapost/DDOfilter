@@ -8,7 +8,7 @@ fs = 50; % sampling freq Hz
 dt = 1/fs; % s
 ft = 0.2; % test signal freq Hz
 f0 = 1; % filter freq Hz
-t = 0:dt:(5/ft); % time in s, 2 test signal periods
+t = 0:dt:(5/ft); % time in s, 5 test signal periods
 % test signal and derivative
 yo = sin(2*pi*ft*t);
 y = yo + randn(size(t))*0.1;

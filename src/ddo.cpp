@@ -5,22 +5,6 @@
 
 using namespace std;
 
-template<class _F>
-int do_filter(_F& filter)
-{
-    while(!cin.eof())
-    {
-        double data;
-        cin >> data;
-        if (!cin.good()) return -1;
-        filter.update(data);
-        cout << filter.x();
-        cout << '\t' << filter.dxdt();
-        cout << endl;
-    }
-    return 0;
-}
-
 int main(int argn, char** argv)
 {
     double dt = 1.; // interval
@@ -53,7 +37,7 @@ int main(int argn, char** argv)
         }
         else if (opt.find("-z")==0) { // damping factor
             opt.erase(0,2);
-            z = atoi(opt.c_str());
+            z = atof(opt.c_str());
         }
         else if (opt.find("-h")==0) { // help
             cout << usage;
@@ -74,11 +58,11 @@ int main(int argn, char** argv)
         cin >> data;
         if (!cin.good()) return -1;
         ddo.update(data);
-        cout << ddo.x();
-        cout << '\t' << ddo.dxdt();
-        cout << endl;
+        cout << ddo.x()
+             << '\t' << ddo.dxdt()
+             << endl;
     }
-
+    
     return 0;
 }
 
