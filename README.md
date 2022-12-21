@@ -1,8 +1,12 @@
 # DDOfilter - Driven Damped Oscillator filter
 
+part of **QDaq** (https://gitlab.com/qdaq/qdaq) - Qt-based Data Acquisition
+
+## About
+
 A driven damped oscillator system can be used as a low-pass signal filter that has the extra advantage of providing the 1st order time derivative of the signal; thus, it can also be used as a differentiator.
 
-The following example shows a 0.2 Hz noizy signal filtered by a 1 Hz DDO. The bottom graph shows the signal derivative as obtained by the DDO. 
+The following figure shows a 0.2 Hz noizy signal filtered by a 1 Hz DDO. The bottom graph shows the signal derivative as obtained by the DDO. 
 
 ![Example](octave/ddo_test2.png)
 
@@ -19,4 +23,4 @@ cmake ..
 make (or nmake)
 ```
 
-This is part of QDaq (https://gitlab.com/qdaq/qdaq) - Qt-based Data Acquisition
+
